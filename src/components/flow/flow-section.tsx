@@ -2,6 +2,7 @@
 
 import { forwardRef } from 'react'
 import { LifeSuite } from './life-suite'
+import { VideoBackground } from '@/components/ui/video-background'
 
 interface FlowSectionProps {
   mode: 'intent' | 'suite' | null
@@ -19,17 +20,14 @@ export const FlowSection = forwardRef<HTMLDivElement, FlowSectionProps>(
         ref={ref}
         className="relative min-h-screen w-full overflow-hidden"
       >
-        {/* Background Image Day (light off - default) */}
+        {/* Background Video Day (light off - default) */}
         <div
           className={`absolute inset-0 z-0 transition-all duration-1000 ease-in-out ${
             isLightOn ? 'opacity-0 brightness-50' : 'opacity-100 brightness-100'
           }`}
-          style={{
-            backgroundImage: 'url(/BG2DAY.png)',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-          }}
-        />
+        >
+          <VideoBackground src="/bg2moving.mp4" playbackRate={0.167} />
+        </div>
 
         {/* Background Image Night (light on - night mode) */}
         <div
