@@ -9,6 +9,10 @@ import { CompoundGrowthCalc } from './compound-growth-calc'
 import { EmergencyFundCalc } from './emergency-fund-calc'
 import { DebtPayoffCalc } from './debt-payoff-calc'
 import { HouseAffordabilityCalc } from './house-affordability-calc'
+import { SavingsRateCalc } from './savings-rate-calc'
+import { NetWorthCalc } from './net-worth-calc'
+import { RentVsBuyCalc } from './rent-vs-buy-calc'
+import { FreelanceRateCalc } from './freelance-rate-calc'
 import { calculators } from '@/lib/calculators/registry'
 
 interface CalculatorDisplayProps {
@@ -32,6 +36,10 @@ const calculatorComponents: Record<string, React.ComponentType<{
   'emergency-fund': EmergencyFundCalc,
   'debt-payoff': DebtPayoffCalc,
   'house-affordability': HouseAffordabilityCalc,
+  'savings-rate': SavingsRateCalc,
+  'net-worth-tracker': NetWorthCalc,
+  'rent-vs-buy': RentVsBuyCalc,
+  'freelance-rate': FreelanceRateCalc,
 }
 
 export function CalculatorDisplay({ slug, compact = false, onBack, prefillValues, onResultChange }: CalculatorDisplayProps) {
