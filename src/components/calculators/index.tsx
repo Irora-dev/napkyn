@@ -5,6 +5,10 @@ import Link from 'next/link'
 import { FireNumberCalc } from './fire-number-calc'
 import { CoastFireCalc } from './coast-fire-calc'
 import { ResultsCalendar } from './results-calendar'
+import { CompoundGrowthCalc } from './compound-growth-calc'
+import { EmergencyFundCalc } from './emergency-fund-calc'
+import { DebtPayoffCalc } from './debt-payoff-calc'
+import { HouseAffordabilityCalc } from './house-affordability-calc'
 import { calculators } from '@/lib/calculators/registry'
 
 interface CalculatorDisplayProps {
@@ -24,6 +28,10 @@ const calculatorComponents: Record<string, React.ComponentType<{
   'fire-number': FireNumberCalc,
   'coast-fire': CoastFireCalc,
   'results-calendar': ResultsCalendar,
+  'compound-growth': CompoundGrowthCalc,
+  'emergency-fund': EmergencyFundCalc,
+  'debt-payoff': DebtPayoffCalc,
+  'house-affordability': HouseAffordabilityCalc,
 }
 
 export function CalculatorDisplay({ slug, compact = false, onBack, prefillValues, onResultChange }: CalculatorDisplayProps) {
