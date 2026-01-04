@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { ParsedIntent, FlowStep, getFlowForIntent } from '@/lib/intent/types'
 import { CalculatorDisplay } from '@/components/calculators'
+import { IntakeCards } from './intake-cards'
 import { ChevronRight, ChevronLeft, Check, Loader2 } from 'lucide-react'
 
 interface IntentFlowProps {
@@ -13,20 +14,23 @@ interface CalculatorResults {
   [calculatorSlug: string]: Record<string, number>
 }
 
+type FlowPhase = 'loading' | 'intake' | 'calculators'
+
 export function IntentFlow({ query }: IntentFlowProps) {
   const [intent, setIntent] = useState<ParsedIntent | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [phase, setPhase] = useState<FlowPhase>('loading')
   const [error, setError] = useState<string | null>(null)
   const [currentStep, setCurrentStep] = useState(0)
   const [results, setResults] = useState<CalculatorResults>({})
   const [flowSteps, setFlowSteps] = useState<FlowStep[]>([])
+  const [intakeValues, setIntakeValues] = useState<Record<string, number>>({})
 
   // Parse the intent when query changes
   useEffect(() => {
     async function parseIntent() {
       if (!query) return
 
-      setLoading(true)
+      setPhase('loading')
       setError(null)
 
       try {
@@ -46,15 +50,23 @@ export function IntentFlow({ query }: IntentFlowProps) {
         const flow = getFlowForIntent(parsed.category)
         setFlowSteps(flow.steps)
 
+        // Move to intake phase
+        setPhase('intake')
+
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Something went wrong')
-      } finally {
-        setLoading(false)
+        setPhase('loading')
       }
     }
 
     parseIntent()
   }, [query])
+
+  // Handle intake completion
+  const handleIntakeComplete = useCallback((values: Record<string, number>) => {
+    setIntakeValues(values)
+    setPhase('calculators')
+  }, [])
 
   // Handle calculator result updates
   const handleCalculatorResult = useCallback((slug: string, calculatorResults: Record<string, number>) => {
@@ -71,16 +83,9 @@ export function IntentFlow({ query }: IntentFlowProps) {
     const step = flowSteps[currentStep]
     const prefill: Record<string, number> = {}
 
-    // From extracted values in the query
-    if (step.prefillFrom.includes('extracted') && intent.extractedValues) {
-      const { extractedValues } = intent
-      if (extractedValues.currentAge) prefill.currentAge = extractedValues.currentAge
-      if (extractedValues.targetAge) prefill.targetAge = extractedValues.targetAge
-      if (extractedValues.currentSavings) prefill.currentSavings = extractedValues.currentSavings
-      if (extractedValues.monthlySavings) prefill.monthlySavings = extractedValues.monthlySavings
-      if (extractedValues.annualExpenses) prefill.annualExpenses = extractedValues.annualExpenses
-      if (extractedValues.annualIncome) prefill.annualIncome = extractedValues.annualIncome
-      if (extractedValues.targetAmount) prefill.targetAmount = extractedValues.targetAmount
+    // Start with intake values (highest priority for first calculator)
+    if (step.prefillFrom.includes('extracted')) {
+      Object.assign(prefill, intakeValues)
     }
 
     // From previous calculator results
@@ -96,7 +101,7 @@ export function IntentFlow({ query }: IntentFlowProps) {
     }
 
     return prefill
-  }, [intent, flowSteps, currentStep, results])
+  }, [intent, flowSteps, currentStep, results, intakeValues])
 
   const goToNext = () => {
     if (currentStep < flowSteps.length - 1) {
@@ -115,7 +120,7 @@ export function IntentFlow({ query }: IntentFlowProps) {
   }
 
   // Loading state
-  if (loading) {
+  if (phase === 'loading' && !error) {
     return (
       <div className="flex flex-col items-center justify-center py-16 text-white/60">
         <Loader2 className="w-8 h-8 animate-spin mb-4" />
@@ -145,21 +150,38 @@ export function IntentFlow({ query }: IntentFlowProps) {
     )
   }
 
+  // Intake phase - conversational cards
+  if (phase === 'intake') {
+    return (
+      <div className="w-full">
+        {/* Show what we understood */}
+        <div className="text-center mb-8">
+          <p className="text-white/70 text-lg font-light leading-relaxed max-w-xl mx-auto">
+            {intent.introMessage}
+          </p>
+          {intent.extractedValues.targetAge && (
+            <p className="text-white/40 text-sm mt-2">
+              Target: Age {intent.extractedValues.targetAge}
+            </p>
+          )}
+        </div>
+
+        {/* Intake cards */}
+        <IntakeCards
+          intent={intent}
+          onComplete={handleIntakeComplete}
+        />
+      </div>
+    )
+  }
+
   const currentFlowStep = flowSteps[currentStep]
   const isFirstStep = currentStep === 0
   const isLastStep = currentStep === flowSteps.length - 1
 
+  // Calculator phase
   return (
     <div className="w-full">
-      {/* Intro message */}
-      {currentStep === 0 && (
-        <div className="mb-8 text-center">
-          <p className="text-white/70 text-lg font-light leading-relaxed max-w-2xl mx-auto">
-            {intent.introMessage}
-          </p>
-        </div>
-      )}
-
       {/* Step progress indicator */}
       <div className="flex items-center justify-center gap-2 mb-8">
         {flowSteps.map((step, index) => (
