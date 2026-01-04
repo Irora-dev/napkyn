@@ -383,12 +383,15 @@ export function FireNumberCalc({ compact = false, prefillValues, onResultChange 
           <p className="text-7xl font-extralight tracking-tight tabular-nums">
             <AnimatedNumber value={results.fireNumber} format={formatCurrency} />
           </p>
-          <p className="text-[13px] text-white/40 mt-4">
-            {results.yearsToFire
-              ? `${results.yearsToFire} years · Age ${currentAge + results.yearsToFire}`
-              : 'Adjust parameters below'
-            }
-          </p>
+          <div className="mt-6">
+            <p className="text-[11px] text-white/30 uppercase tracking-[0.15em] mb-1">Retire In</p>
+            <p className="text-lg font-light text-white/70">
+              {results.yearsToFire
+                ? `${results.yearsToFire} years · Age ${currentAge + results.yearsToFire}`
+                : 'Adjust parameters below'
+              }
+            </p>
+          </div>
         </div>
 
         {/* Inputs */}

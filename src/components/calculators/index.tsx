@@ -3,6 +3,8 @@
 import { ArrowLeft, ExternalLink } from 'lucide-react'
 import Link from 'next/link'
 import { FireNumberCalc } from './fire-number-calc'
+import { CoastFireCalc } from './coast-fire-calc'
+import { ResultsCalendar } from './results-calendar'
 import { calculators } from '@/lib/calculators/registry'
 
 interface CalculatorDisplayProps {
@@ -20,9 +22,8 @@ const calculatorComponents: Record<string, React.ComponentType<{
   onResultChange?: (results: Record<string, number>) => void
 }>> = {
   'fire-number': FireNumberCalc,
-  // Add more calculators here as they're built
-  // 'coast-fire': CoastFireCalc,
-  // 'fire-date': FireDateCalc,
+  'coast-fire': CoastFireCalc,
+  'results-calendar': ResultsCalendar,
 }
 
 export function CalculatorDisplay({ slug, compact = false, onBack, prefillValues, onResultChange }: CalculatorDisplayProps) {

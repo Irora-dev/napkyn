@@ -81,10 +81,10 @@ export const intentFlows: Record<IntentCategory, IntentFlow> = {
         prefillFrom: ['extracted', 'previous']
       },
       {
-        calculatorSlug: 'fire-date',
-        title: 'Your FIRE Date',
-        description: 'Calculate exactly when you can retire',
-        whyThisMatters: 'Put a date on the calendar. This makes it real and trackable.',
+        calculatorSlug: 'results-calendar',
+        title: 'Your Timeline',
+        description: 'See your path to financial independence',
+        whyThisMatters: 'Put it on the calendar and get your personalized plan.',
         prefillFrom: ['extracted', 'previous']
       }
     ]
@@ -103,17 +103,17 @@ export const intentFlows: Record<IntentCategory, IntentFlow> = {
         prefillFrom: ['extracted']
       },
       {
-        calculatorSlug: 'savings-rate',
-        title: 'Savings Rate Impact',
-        description: 'See how your savings rate affects your timeline',
-        whyThisMatters: 'Your savings rate is the single biggest factor in how fast you reach FIRE.',
-        prefillFrom: ['extracted', 'previous']
-      },
-      {
         calculatorSlug: 'coast-fire',
         title: 'Coast FIRE Milestone',
         description: 'When can you downshift and coast?',
         whyThisMatters: 'Coast FIRE is a powerful milestone - it means you could work less stressful jobs and still retire on time.',
+        prefillFrom: ['extracted', 'previous']
+      },
+      {
+        calculatorSlug: 'results-calendar',
+        title: 'Your Timeline',
+        description: 'See your path to financial independence',
+        whyThisMatters: 'Put it on the calendar and get your personalized plan.',
         prefillFrom: ['extracted', 'previous']
       }
     ]
