@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import {
   Flame,
   Briefcase,
@@ -92,7 +93,18 @@ interface LifeSuiteProps {
 }
 
 export function LifeSuite({ onSelectCalculator }: LifeSuiteProps) {
+  const router = useRouter()
   const [selectedCategory, setSelectedCategory] = useState<CalculatorCategory | 'popular'>('popular')
+
+  const handleCalculatorClick = (slug: string) => {
+    if (onSelectCalculator) {
+      // When callback is provided, display inline (don't navigate)
+      onSelectCalculator(slug)
+    } else {
+      // When no callback, navigate to dedicated page
+      router.push(`/calculators/${slug}`)
+    }
+  }
 
   const displayedCalculators = selectedCategory === 'popular'
     ? getPopularCalculators()
@@ -134,7 +146,7 @@ export function LifeSuite({ onSelectCalculator }: LifeSuiteProps) {
           <CalculatorCard
             key={calculator.slug}
             calculator={calculator}
-            onClick={() => onSelectCalculator?.(calculator.slug)}
+            onClick={() => handleCalculatorClick(calculator.slug)}
           />
         ))}
       </div>

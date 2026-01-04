@@ -87,22 +87,8 @@ export default function Home() {
           <div className="flex flex-col items-center -mt-[5vh]">
             {/* Headline */}
             <div className="text-center mb-8 animate-fade-in">
-              <h1 className="text-7xl md:text-8xl lg:text-9xl font-bold mb-4 tracking-tight font-[family-name:var(--font-display)] relative">
-                {/* Glow layer behind text */}
-                {isLightOn && (
-                  <span
-                    className="absolute inset-0 text-orange-400 blur-lg animate-glow-pulse"
-                    aria-hidden="true"
-                  >
-                    Napkyn
-                  </span>
-                )}
-                {/* Main text */}
-                <span
-                  className={`relative transition-all duration-1000 ${
-                    isLightOn ? 'text-yellow-200' : 'text-white'
-                  }`}
-                >
+              <h1 className="text-7xl md:text-8xl lg:text-9xl font-bold mb-4 tracking-tight font-[family-name:var(--font-display)]">
+                <span className="text-white">
                   <TextReveal
                     text="Napkyn"
                     delayPerLetter={120}
